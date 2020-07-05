@@ -1,4 +1,3 @@
-
 import tensorflow as tf
 import numpy as np
 
@@ -15,17 +14,18 @@ learning_rate = tf.constant(0.01, dtype=tf.float32)
 
 # W, b update
 for i in range(100):
-    # Gradient descent
+    # TF2.x's Automatic Differentiation, it records all computation in context to tape
     with tf.GradientTape() as tape:
         hypothesis = W * x_data + b
         cost = tf.reduce_mean(tf.square(hypothesis - y_data))
-    W_grad, b_grad = tape.gradient(cost, [W, b])
-    W.assign_sub(learning_rate * W_grad)
+    # tape.gradient(target, sources)
+    W_grad, b_grad = tape.gradient(cost, [W, b])  # compute the gradient, using reverse mode differentiation
+    W.assign_sub(learning_rate * W_grad)  # use to change a tf.Variable, this syntax means -=
     b.assign_sub(learning_rate * b_grad)
     if i % 10 == 0:
-      print("{:5}|{:10.4f}|{:10.4f}|{:10.6f}".format(i, W.numpy(), b.numpy(), cost))
+        # Tensor are explicitly converted to NumPy ndarrays using .numpy() method
+        print("{:5}|{:10.4f}|{:10.4f}|{:10.6f}".format(i, W.numpy(), b.numpy(), cost))
 
-print()
 
 # predict
 print(W * 5 + b)
