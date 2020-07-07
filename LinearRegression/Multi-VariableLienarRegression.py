@@ -42,5 +42,9 @@ for i in range(n_epochs + 1):
     W.assign_sub(learning_rate * W_grad)
     b.assign_sub(learning_rate * b_grad)
 
+
     if i % 100 == 0:
         print("{:5} | {:10.4f}".format(i, cost.numpy()))
+        learning_rate += 0.000001  # increase learning_rate
+
+print("-----end-----")
